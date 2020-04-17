@@ -29,7 +29,7 @@ enum StringBaseConv {
     HEX = 16,
 };
 
-enum class byte : unsigned char {};
+using byte = std::uint8_t;
 
 class String {
     std::string m_u;
@@ -52,7 +52,7 @@ class String {
             case BIN:
                 return 65;
             case DEC:
-
+                return 11;
             case HEX:
                 return 17;
             default:
@@ -76,20 +76,22 @@ class String {
     [[nodiscard]] inline auto operator[](unsigned idx) const noexcept { return m_u[idx]; }
     [[nodiscard]] inline auto& operator[](unsigned idx) noexcept { return m_u[idx]; }
 
-    template <class T>[[nodiscard]] inline bool concat(const T& v) {
+    template <class T> inline bool concat(const T& v) {
         m_u += String(v).m_u;
         return true;
     }
 
-    inline int compareTo(const String& s) const noexcept { return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size())); }
+    [[nodiscard]] inline int compareTo(const String& s) const noexcept {
+        return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size()));
+    }
 
-    inline bool startsWith(const String& s) const noexcept {
+    [[nodiscard]] inline bool startsWith(const String& s) const noexcept {
         if (s.m_u.size() > m_u.size())
             return false;
         return std::memcmp(m_u.c_str(), s.m_u.c_str(), s.m_u.size()) == 0;
     }
 
-    inline bool endsWith(const String& s) const noexcept {
+    [[nodiscard]] inline bool endsWith(const String& s) const noexcept {
         if (s.m_u.size() > m_u.size())
             return false;
         return std::memcmp(&*m_u.rbegin() - s.m_u.size(), s.m_u.c_str(), s.m_u.size()) == 0;
@@ -101,13 +103,13 @@ class String {
         }
     }
 
-    inline int indexOf(const char* c) { return m_u.find(c); }
+    [[nodiscard]] inline int indexOf(const char* c) const noexcept { return m_u.find(c); }
 
-    inline int indexOf(const char* c, unsigned index) { return m_u.find (c, index); }
+    [[nodiscard]] inline int indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
 
-    inline int indexOf(const String& str) { return m_u.find(str); }
+    [[nodiscard]] inline int indexOf(const String& str) const noexcept { return m_u.find(str); }
 
-    inline int indexOf(const String& str, unsigned index) { return m_u.find(str, index); }
+    [[nodiscard]] inline int indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str, index); }
 
     inline void remove(unsigned idx) { m_u.erase(index); }
 
@@ -119,9 +121,9 @@ class String {
 
     inline void setCharAt(unsigned index, const char* c) { m_u[index] = c; }
 
-    inline String substring(unsigned from) { return m_u.substr(from); }
+    [[nodiscard]] inline String substring(unsigned from) const noexcept { return m_u.substr(from); }
 
-    inline String substring(unsigned from, unsigned to){ return m_u.substr(from, to - from); }
+    [[nodiscard]] inline String substring(unsigned from, unsigned to) const noexcept { return m_u.substr(from, to - from); }
 
     inline void toCharArray(const char* buffer[], unsigned length) { 
         if (length <= m_u.length) {
@@ -135,19 +137,19 @@ class String {
         }
     }
 
-    inline int toInt() const noexcept {
+    [[nodiscard]] inline int toInt() const noexcept {
         if (isdigit(m_u[0]) {
             return std::stoi(m_u);
         } else return 0L;
     }
 
-    inline double toDouble() const noexcept {
+    [[nodiscard]] inline double toDouble() const noexcept {
         if (isdigit(m_u[0]) {
             return std::stod(m_u);
         } else return 0;
     }
 
-    inline float toFloat() const noexcept {
+    [[nodiscard]] inline float toFloat() const noexcept {
         if (isdigit(m_u[0]) {
             return std::stof(m_u);
         } else return 0;
