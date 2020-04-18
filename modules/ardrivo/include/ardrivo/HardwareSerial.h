@@ -20,6 +20,7 @@
 #define SMARTCAR_EMUL_HARDWARESERIAL_H
 
 #include "Print.h"
+#include "BoardData.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -50,6 +51,8 @@
 
 struct HardwareSerial : Print /* FIXME: implement Stream */ {
 
+    BoardData board_data;
+
     void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
     void begin(unsigned long, std::uint8_t);
     void end();
@@ -57,16 +60,17 @@ struct HardwareSerial : Print /* FIXME: implement Stream */ {
     //virtual int peek() override;
     //int read() override;
     int availableForWrite() override;
-    bool find(char target){}
-    bool find(char target, size_t length);
-    bool findUntil(char target, char terminal);
+    bool find(char target);
+    bool find(char* target, size_t length);
+    bool findUntil(char* target, char terminal);
     float parseFloat();
     float parseFloat(std::string lookahead);
     float parseFloat(std::string lookahead, char ignore);
-    float parseInt();
-    float parseInt(std::string lookahead);
-    float parseInt(std::string lookahead, char ignore);
+    int parseInt();
+    int parseInt(std::string lookahead);
+    int parseInt(std::string lookahead, char ignore);
     void flush() override;
+    int peek();
     size_t write(std::uint8_t) override;
     size_t write(const std::uint8_t*, size_t) override;
     inline size_t write(unsigned long n) { return write((std::uint8_t)n); }
@@ -74,7 +78,14 @@ struct HardwareSerial : Print /* FIXME: implement Stream */ {
     inline size_t write(unsigned int n) { return write((std::uint8_t)n); }
     inline size_t write(int n) { return write((std::uint8_t)n); }
     using Print::write; // pull in string printers
+    int read();
+    int readBytes(char buffer[], int length);
+    int readBytesUntil(char character, char buffer[], int length);
+    std::string readString();
+    std::string readStringUntil(char terminator);
+
     [[nodiscard]] constexpr explicit(false) operator bool() noexcept { return true; }
+    long timeout;
 
   private:
     bool begun = false;
