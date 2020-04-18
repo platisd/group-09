@@ -94,7 +94,7 @@ class String {
     [[nodiscard]] inline bool endsWith(const String& s) const noexcept {
         if (s.m_u.size() > m_u.size())
             return false;
-        return std::memcmp(&*m_u.rbegin() - s.m_u.size(), s.m_u.c_str(), s.m_u.size()) == 0;
+        return (m_u.compare (m_u.length() - s.m_u.length(), s.m_u.length(), s.m_u) == 0);    
     }
 
     inline void getBytes(byte buffer [], unsigned length) { 
@@ -115,17 +115,24 @@ class String {
 
     inline void remove(unsigned idx, unsigned count) { m_u.erase(idx, idx + count - 1); }
 
-    inline void replace(const String& substring1, const String& substring2) { m_u = std::regex_replace (m_u, std::regex(substring1), substring2); }
+    inline void replace(const String& substring1, const String& substring2) { 
+       size_t position = m_u.find(substring1.m_u);
+
+       while (position != std::string::npos) {
+           m_u.replace(position, m_u.size(), substring2.m_u);
+           position = m_u.find(substring1.m_u, position + substring2.m_u.size());
+       }
+    }
 
     inline void reserve(unsigned size) { m_u.reserve(size); }
 
     inline void setCharAt(unsigned index, const char* c) { m_u[index] = c; }
 
-    [[nodiscard]] inline String substring(unsigned from) const noexcept { return m_u.substr(from); }
+    [[nodiscard]] inline String substring(unsigned from) const { return m_u.substr(from); }
 
-    [[nodiscard]] inline String substring(unsigned from, unsigned to) const noexcept { return m_u.substr(from, to - from); }
+    [[nodiscard]] inline String substring(unsigned from, unsigned to) const { return m_u.substr(from, to - from); }
 
-    inline void toCharArray(const char* buffer[], unsigned length) { 
+    inline void toCharArray(const char* buffer[], unsigned length) noexcept{ 
         if (length <= m_u.length) {
             for (int i = 0; i < length; i++) {
                 buffer[i] = m_u[i];
@@ -137,10 +144,10 @@ class String {
         }
     }
 
-    [[nodiscard]] inline int toInt() const noexcept {
+    [[nodiscard]] inline long toInt() const noexcept {
         if (isdigit(m_u[0]) {
             return std::stoi(m_u);
-        } else return 0L;
+        } else return 0;
     }
 
     [[nodiscard]] inline double toDouble() const noexcept {
