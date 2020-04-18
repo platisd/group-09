@@ -15,50 +15,50 @@
  *  limitations under the License.
  */
 
-#include <WString.h>
+#include "WString.h"
 
-[[nodiscard]] inline auto c_str() const noexcept { return m_u.c_str(); }
-[[nodiscard]] inline auto length() const noexcept { return m_u.length(); }
-[[nodiscard]] inline auto charAt(unsigned idx) const noexcept { return m_u.at(idx); }
-[[nodiscard]] inline auto& charAt(unsigned idx) noexcept { return m_u.at(idx); }
+[[nodiscard]] inline auto String::c_str() const noexcept { return m_u.c_str(); }
+[[nodiscard]] inline auto String::length() const noexcept { return m_u.length(); }
+[[nodiscard]] inline auto String::charAt(unsigned idx) const noexcept { return m_u.at(idx); }
+[[nodiscard]] inline auto& String::charAt(unsigned idx) noexcept { return m_u.at(idx); }
 [[nodiscard]] inline auto operator[](unsigned idx) const noexcept { return m_u[idx]; }
 [[nodiscard]] inline auto& operator[](unsigned idx) noexcept { return m_u[idx]; }
 
-[[nodiscard]] inline int compareTo(const String& s) const noexcept {
+[[nodiscard]] int String::compareTo(const String& s) const noexcept {
     return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size()));
 }
 
-[[nodiscard]] inline bool startsWith(const String& s) const noexcept {
+[[nodiscard]] bool String::startsWith(const String& s) const noexcept {
     if (s.m_u.size() > m_u.size())
         return false;
     return std::memcmp(m_u.c_str(), s.m_u.c_str(), s.m_u.size()) == 0;
 }
 
-[[nodiscard]] inline bool endsWith(const String& s) const noexcept {
+[[nodiscard]] bool String::endsWith(const String& s) const noexcept {
     if (s.m_u.size() > m_u.size())
         return false;
     return (m_u.compare(m_u.length() - s.m_u.length(), s.m_u.length(), s.m_u) == 0);
 }
 
-inline void getBytes(byte buffer[], unsigned length) {
+void String::getBytes(byte buffer[], unsigned length) const noexcept {
     for (int i = 0; i < m_u.length; i++) {
         buffer[i] = (byte)m_u[i];
     }
 }
 
-[[nodiscard]] inline int indexOf(const char* c) const noexcept { return m_u.find(c); }
+[[nodiscard]] inline int String::indexOf(const char* c) const noexcept { return m_u.find(c); }
 
-[[nodiscard]] inline int indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
+[[nodiscard]] inline int String::indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
 
-[[nodiscard]] inline int indexOf(const String& str) const noexcept { return m_u.find(str); }
+[[nodiscard]] inline int String::indexOf(const String& str) const noexcept { return m_u.find(str); }
 
-[[nodiscard]] inline int indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str, index); }
+[[nodiscard]] inline int String::indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str, index); }
 
-inline void remove(unsigned idx) { m_u.erase(index); }
+void String::remove(unsigned idx) { m_u.erase(index); }
 
-inline void remove(unsigned idx, unsigned count) { m_u.erase(idx, idx + count - 1); }
+void String::remove(unsigned idx, unsigned count) { m_u.erase(idx, idx + count - 1); }
 
-inline void replace(const String& substring1, const String& substring2) {
+void String::replace(const String& substring1, const String& substring2) {
     size_t position = m_u.find(substring1.m_u);
 
     while (position != std::string::npos) {
@@ -67,15 +67,15 @@ inline void replace(const String& substring1, const String& substring2) {
     }
 }
 
-inline void reserve(unsigned size) { m_u.reserve(size); }
+void String::reserve(unsigned size) { m_u.reserve(size); }
 
-inline void setCharAt(unsigned index, const char* c) { m_u[index] = c; }
+inline void String::setCharAt(unsigned index, const char* c) { m_u[index] = c; }
 
-[[nodiscard]] inline String substring(unsigned from) const { return m_u.substr(from); }
+[[nodiscard]] String String::substring(unsigned from) const { return m_u.substr(from); }
 
-[[nodiscard]] inline String substring(unsigned from, unsigned to) const { return m_u.substr(from, to - from); }
+[[nodiscard]] String String::substring(unsigned from, unsigned to) const { return m_u.substr(from, to - from); }
 
-inline void toCharArray(const char* buffer[], unsigned length) noexcept {
+void String::toCharArray(const char* buffer[], unsigned length) noexcept {
     if (length <= m_u.length) {
         for (int i = 0; i < length; i++) {
             buffer[i] = m_u[i];
@@ -87,33 +87,36 @@ inline void toCharArray(const char* buffer[], unsigned length) noexcept {
     }
 }
 
-[[nodiscard]] inline long toInt() const noexcept {
+[[nodiscard]] long String::toInt() const noexcept {
         if (isdigit(m_u[0]) {
         return std::stoi(m_u);
-        } else return 0;
+        } 
+        else return 0;
 }
 
-[[nodiscard]] inline double toDouble() const noexcept {
+[[nodiscard]] double String::toDouble() const noexcept {
         if (isdigit(m_u[0]) {
         return std::stod(m_u);
-        } else return 0;
+        } 
+        else return 0;
 }
 
-[[nodiscard]] inline float toFloat() const noexcept {
+[[nodiscard]] float String::toFloat() const noexcept {
         if (isdigit(m_u[0]) {
         return std::stof(m_u);
-        } else return 0;
+        } 
+        else return 0;
 }
 
-inline void toLowerCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::tolower); }
+void String::toLowerCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::tolower); }
 
-inline void toUpperCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::toupper); }
+void String::toUpperCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::toupper); }
 
-inline void trim() { m_u = m_u.erase(std::remove(m_u.begin(), m_u.end(), ' '), m_u.end()); }
+void String::trim() { m_u = m_u.erase(std::remove(m_u.begin(), m_u.end(), ' '), m_u.end()); }
 
-[[nodiscard]] inline bool equals(const String& s) const noexcept { return m_u == s.m_u; }
+[[nodiscard]] bool String::equals(const String& s) const noexcept { return m_u == s.m_u; }
 
-[[nodiscard]] inline bool equalsIgnoreCase(const String& s) const noexcept {
+[[nodiscard]] bool String::equalsIgnoreCase(const String& s) const noexcept {
     String str = m_u;
     return (std::transform(s.begin(), s.end(), s.begin(), std::tolower) == std::transform(str.begin(), str.end(), str.begin(), std::tolower));
 }
