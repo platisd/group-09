@@ -89,7 +89,7 @@ class String {
 
     [[nodiscard]] bool endsWith(const String& s) const noexcept;
 
-    void getBytes(byte buffer[], unsigned length);
+    void getBytes(byte buffer[], unsigned length) const noexcept;
 
     [[nodiscard]] int indexOf(const char* c) const noexcept;
 
@@ -121,9 +121,9 @@ class String {
 
     [[nodiscard]] float toFloat() const noexcept;
 
-    void toLowerCase();
+    void toLowerCase() noexcept;
 
-    void toUpperCase();
+    void toUpperCase() noexcept;
 
     void trim();
 

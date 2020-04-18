@@ -108,9 +108,9 @@ void String::toCharArray(const char* buffer[], unsigned length) noexcept {
         else return 0;
 }
 
-void String::toLowerCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::tolower); }
+void String::toLowerCase() noexcept{ std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::tolower); }
 
-void String::toUpperCase() { std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::toupper); }
+void String::toUpperCase() noexcept{ std::transform(m_u.begin(), m_u.end(), m_u.begin(), std::toupper); }
 
 void String::trim() { m_u = m_u.erase(std::remove(m_u.begin(), m_u.end(), ' '), m_u.end()); }
 
