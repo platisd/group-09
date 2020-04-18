@@ -17,12 +17,12 @@
 
 #include "WString.h"
 
-[[nodiscard]] inline auto String::c_str() const noexcept { return m_u.c_str(); }
-[[nodiscard]] inline auto String::length() const noexcept { return m_u.length(); }
-[[nodiscard]] inline auto String::charAt(unsigned idx) const noexcept { return m_u.at(idx); }
-[[nodiscard]] inline auto& String::charAt(unsigned idx) noexcept { return m_u.at(idx); }
-[[nodiscard]] inline auto operator[](unsigned idx) const noexcept { return m_u[idx]; }
-[[nodiscard]] inline auto& operator[](unsigned idx) noexcept { return m_u[idx]; }
+[[nodiscard]] auto String::c_str() const noexcept { return m_u.c_str(); }
+[[nodiscard]] auto String::length() const noexcept { return m_u.length(); }
+[[nodiscard]] auto String::charAt(unsigned idx) const noexcept { return m_u.at(idx); }
+[[nodiscard]] auto& String::charAt(unsigned idx) noexcept { return m_u.at(idx); }
+[[nodiscard]] auto operator[](unsigned idx) const noexcept { return m_u[idx]; }
+[[nodiscard]] auto& operator[](unsigned idx) noexcept { return m_u[idx]; }
 
 [[nodiscard]] int String::compareTo(const String& s) const noexcept {
     return std::memcmp(m_u.c_str(), s.m_u.c_str(), (std::min)(s.m_u.size(), m_u.size()));
@@ -46,13 +46,13 @@ void String::getBytes(byte buffer[], unsigned length) const noexcept {
     }
 }
 
-[[nodiscard]] inline int String::indexOf(const char* c) const noexcept { return m_u.find(c); }
+[[nodiscard]] int String::indexOf(const char* c) const noexcept { return m_u.find(c); }
 
-[[nodiscard]] inline int String::indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
+[[nodiscard]] int String::indexOf(const char* c, unsigned index) const noexcept { return m_u.find(c, index); }
 
-[[nodiscard]] inline int String::indexOf(const String& str) const noexcept { return m_u.find(str); }
+[[nodiscard]] int String::indexOf(const String& str) const noexcept { return m_u.find(str); }
 
-[[nodiscard]] inline int String::indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str, index); }
+[[nodiscard]] int String::indexOf(const String& str, unsigned index) const noexcept { return m_u.find(str, index); }
 
 void String::remove(unsigned idx) { m_u.erase(index); }
 
@@ -69,7 +69,7 @@ void String::replace(const String& substring1, const String& substring2) {
 
 void String::reserve(unsigned size) { m_u.reserve(size); }
 
-inline void String::setCharAt(unsigned index, const char* c) { m_u[index] = c; }
+void String::setCharAt(unsigned index, const char* c) { m_u[index] = c; }
 
 [[nodiscard]] String String::substring(unsigned from) const { return m_u.substr(from); }
 
@@ -121,13 +121,13 @@ void String::trim() { m_u = m_u.erase(std::remove(m_u.begin(), m_u.end(), ' '), 
     return (std::transform(s.begin(), s.end(), s.begin(), std::tolower) == std::transform(str.begin(), str.end(), str.begin(), std::tolower));
 }
 
-[[nodiscard]] inline bool operator==(const String& s) const noexcept { return m_u == s.m_u; }
-[[nodiscard]] inline bool operator!=(const String& s) const noexcept { return m_u != s.m_u; }
-[[nodiscard]] inline bool operator<(const String& s) const noexcept { return m_u < s.m_u; }
-[[nodiscard]] inline bool operator<=(const String& s) const noexcept { return m_u <= s.m_u; }
-[[nodiscard]] inline bool operator>(const String& s) const noexcept { return m_u > s.m_u; }
-[[nodiscard]] inline bool operator>=(const String& s) const noexcept { return m_u >= s.m_u; }
+[[nodiscard]] bool operator==(const String& s) const noexcept { return m_u == s.m_u; }
+[[nodiscard]] bool operator!=(const String& s) const noexcept { return m_u != s.m_u; }
+[[nodiscard]] bool operator<(const String& s) const noexcept { return m_u < s.m_u; }
+[[nodiscard]] bool operator<=(const String& s) const noexcept { return m_u <= s.m_u; }
+[[nodiscard]] bool operator>(const String& s) const noexcept { return m_u > s.m_u; }
+[[nodiscard]] bool operator>=(const String& s) const noexcept { return m_u >= s.m_u; }
 
-[[nodiscard]] inline String operator+(const String& lhs, const String& rhs) { return lhs + rhs; }
-[[nodiscard]] inline String operator+(const String& lhs, const char* rhs) { return lhs + rhs; }
-[[nodiscard]] inline String operator+(const char* lhs, const String& rhs) { return lhs + rhs; }
+[[nodiscard]] String operator+(const String& lhs, const String& rhs) { return lhs + rhs; }
+[[nodiscard]] String operator+(const String& lhs, const char* rhs) { return lhs + rhs; }
+[[nodiscard]] String operator+(const char* lhs, const String& rhs) { return lhs + rhs; }
