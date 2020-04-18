@@ -51,17 +51,15 @@
 
 struct HardwareSerial : Stream {
 
-    BoardData board_data;
-
     void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
     void begin(unsigned long, std::uint8_t);
     void end();
 
-    int available() override;
-    int read() override;
-    int peek() override;
+    [[nodiscard]] int available() override;
+    [[nodiscard]] int read() override;
+    [[nodiscard]] int peek() override;
 
-    int availableForWrite() override;
+    [[nodiscard]] int availableForWrite() override;
 
     size_t write(std::uint8_t) override;
     size_t write(const std::uint8_t*, size_t) override;

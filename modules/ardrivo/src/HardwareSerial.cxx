@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <limits>
+#include "BoardDataDef.hxx"
 #include "HardwareSerial.h"
 
 void HardwareSerial::begin(unsigned long, uint8_t) { begun = true; }
@@ -31,27 +32,31 @@ int HardwareSerial::availableForWrite() { return std::numeric_limits<int>::max()
 size_t HardwareSerial::write(uint8_t c) {
     if (!begun)
         return 0;
-    write_byte(c);
+    std::lock_guard guard{board_data->uart_rx_buf_mutex};
+    board_data->write_byte(c);
     return 1;
 }
 
 size_t HardwareSerial::write(const uint8_t* buf, std::size_t n) {
     if (!begun)
         return 0;
-    write_buf(buf, n);
+    std::lock_guard guard{board_data->uart_rx_buf_mutex};
+    board_data->write_buf(buf, n);
     return n;
 }
 
 int HardwareSerial::peek() {
     if (!begun)
         return -1;
-    return board_data.data.front();
+    std::lock_guard guard{board_data->uart_rx_buf_mutex};
+    return board_data->uart_rx_buf.front();
 }
 
 int HardwareSerial::read() {
     if (!begun)
         return -1;
-    int firstByte = board_data.data.front();
-    board_data.data.erase(board_data.data.begin());
+    std::lock_guard guard{board_data->uart_rx_buf_mutex};
+    int firstByte = +board_data->uart_rx_buf.front();
+    board_data->uart_rx_buf.erase(board_data->uart_rx_buf.begin());
     return firstByte;
 }

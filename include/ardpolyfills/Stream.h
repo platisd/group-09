@@ -39,10 +39,10 @@ struct Stream : Print {
 
     Stream() = default;
 
-    bool find(char target) { return find(&target, 0); }
-    bool find(char* target, size_t length) { return findUntil(target, length, NO_IGNORE_CHAR); }
-    bool findUntil(char target, char terminal) { return findUntil(&target, 0, NO_IGNORE_CHAR); }
-    bool findUntil(char* target, int length, char terminal);
+    [[nodiscard]] bool find(char target) noexcept { return find(&target, 0); }
+    [[nodiscard]] bool find(char* target, size_t length) noexcept { return findUntil(target, length, NO_IGNORE_CHAR); }
+    [[nodiscard]] bool findUntil(char target, char terminal) noexcept { return findUntil(&target, 0, NO_IGNORE_CHAR); }
+    [[nodiscard]] bool findUntil(char* target, int length, char terminal) noexcept;
     size_t readBytes(char* buffer, int length) { return readBytesUntil(NO_IGNORE_CHAR, buffer, length); }
     size_t readBytesUntil(char character, char* buffer, int length);
     // Needs String implementation

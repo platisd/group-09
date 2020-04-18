@@ -19,14 +19,16 @@
 #ifndef SMARTCAR_EMUL_BOARDDATA_HXX
 #define SMARTCAR_EMUL_BOARDDATA_HXX
 
-#include <vector>
 #include <deque>
-
-extern bool (*write_byte)(unsigned char);
-extern size_t (*write_buf)(const unsigned char*, size_t);
+#include <mutex>
+#include <vector>
 
 struct BoardData {
-    std::vector<char> data;
+    bool (*write_byte)(unsigned char);
+    size_t (*write_buf)(const unsigned char*, size_t);
+
+    std::vector<char> uart_rx_buf;
+    std::mutex uart_rx_buf_mutex;
 };
 
 #endif // SMARTCAR_EMUL_BOARDDATA_HXX
