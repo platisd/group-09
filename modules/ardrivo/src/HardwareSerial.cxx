@@ -34,7 +34,7 @@ int HardwareSerial::available() { return std::numeric_limits<int>::max(); }
 
 int HardwareSerial::availableForWrite() { return std::numeric_limits<int>::max(); }
 
-bool HardwareSerial::find(char target){ return std::find(board_data.data.begin(), board_data.data.end(), target) != board_data.data.end(); }
+bool HardwareSerial::find(char target) { return std::find(board_data.data.begin(), board_data.data.end(), target) != board_data.data.end(); }
 
 bool HardwareSerial::find(char* target, size_t length) {
     return std::find(board_data.data.begin(), board_data.data.end(), target) != board_data.data.end();
@@ -42,13 +42,13 @@ bool HardwareSerial::find(char* target, size_t length) {
 
 bool HardwareSerial::findUntil(char* target, char terminal) {
     int position = 0;
-    while(board_data.data.at(position)!=terminal){
+    while (board_data.data.at(position) != terminal) {
         position++;
     }
-    return std::find(board_data.data.begin(), board_data.data.begin()+position, target) != board_data.data.end();
+    return std::find(board_data.data.begin(), board_data.data.begin() + position, target) != board_data.data.end();
 }
 
-float HardwareSerial::parseFloat(){
+float HardwareSerial::parseFloat() {
     stringstream ss;
     ss << board_data.data.data();
     string temp;
@@ -61,31 +61,37 @@ float HardwareSerial::parseFloat(){
     return found;
 }
 
-int HardwareSerial::parseInt(){
+float HardwareSerial::parseFloat(std::string lookahead) { return 0; }
+float HardwareSerial::parseFloat(std::string lookahead, char ignore) { return 0; }
+
+int HardwareSerial::parseInt() {
     int start, end, position = 0;
     bool found = false;
-    while(found==false&position!=sizeof(board_data.data)){
-        if(isdigit(board_data.data.at(position))){
+    while (found == false & position != sizeof(board_data.data)) {
+        if (isdigit(board_data.data.at(position))) {
             start = position;
             found = true;
-        }
-        else{
+        } else {
             position++;
         }
     }
-    if(found == false){return 0;}
-
-    if(isdigit(board_data.data.at(position))){
-        position++;
+    if (found == false) {
+        return 0;
     }
-    else{
-        end = position-1;
+
+    if (isdigit(board_data.data.at(position))) {
+        position++;
+    } else {
+        end = position - 1;
     }
 
     std::string read = board_data.data.data();
 
-    return std::stoi(read.substr(start,end));
+    return std::stoi(read.substr(start, end));
 }
+
+int HardwareSerial::parseInt(std::string lookahead) { return 0; }
+int HardwareSerial::parseInt(std::string lookahead, char ignore) { return 0; }
 
 void HardwareSerial::flush() { std::cout.flush(); }
 
@@ -122,20 +128,20 @@ int HardwareSerial::read() {
 int HardwareSerial::readBytes(char buffer[], int length) {
     if (board_data.data.data() == "")
         return 0;
-    std::copy(board_data.data.begin(),board_data.data.end(),buffer);
-    board_data.data.erase(board_data.data.begin(),board_data.data.end());
+    std::copy(board_data.data.begin(), board_data.data.end(), buffer);
+    board_data.data.erase(board_data.data.begin(), board_data.data.end());
     return sizeof(buffer);
 }
 
-int HardwareSerial::readBytesUntil(char character, char* buffer, int length){
+int HardwareSerial::readBytesUntil(char character, char* buffer, int length) {
     if (board_data.data.data() == "")
         return 0;
     int position = 0;
-    while(board_data.data.at(position)!=character){
-        buffer[position]=board_data.data.at(position);
+    while (board_data.data.at(position) != character) {
+        buffer[position] = board_data.data.at(position);
         position++;
     }
-    board_data.data.erase(board_data.data.begin(), board_data.data.begin()+position);
+    board_data.data.erase(board_data.data.begin(), board_data.data.begin() + position);
     return sizeof(buffer);
 }
 
@@ -145,21 +151,15 @@ std::string HardwareSerial::readString() {
     return read;
 }
 
-std::string HardwareSerial::readStringUntil(char terminator){
+std::string HardwareSerial::readStringUntil(char terminator) {
     int position = 0;
     std::string read;
-    while(board_data.data.at(position)!=terminator){
-        read[position]=board_data.data.at(position);
+    while (board_data.data.at(position) != terminator) {
+        read[position] = board_data.data.at(position);
         position++;
     }
-    board_data.data.erase(board_data.data.begin(), board_data.data.begin()+position);
+    board_data.data.erase(board_data.data.begin(), board_data.data.begin() + position);
     return read;
 }
 
-void setTimeout(long duration){
-    Serial.timeout = duration;
-}
-
-
-
-
+void setTimeout(long duration) { Serial.timeout = duration; }

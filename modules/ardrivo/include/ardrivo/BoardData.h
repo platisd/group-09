@@ -7,6 +7,8 @@
 
 #include <vector>
 
-struct BoardData{std::vector<char> data;};
+struct BoardData {
+    std::vector<char> data;
+};
 
 #endif // SMARTCAR_EMUL_BOARDDATA_H
