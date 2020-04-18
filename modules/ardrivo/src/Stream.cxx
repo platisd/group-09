@@ -73,10 +73,8 @@ float Stream::parseFloat(LookaheadMode lookahead, char ignore) {
 
     if (isNegative)
         value = -value;
-    if (isFraction)
-        return value * fraction;
-    else
-        return value;
+
+    return isFraction ? value * fraction : value;
 }
 
 long Stream::parseInt(LookaheadMode lookahead, char ignore) {
@@ -109,7 +107,7 @@ size_t Stream::readBytesUntil(char terminator, char* buffer, int length) {
         int c = read();
         if (c < 0 || c == terminator)
             break;
-        *buffer++ = (char)c;
+        *buffer++ = static_cast<char>(c);
         ++index;
     }
     return index;
