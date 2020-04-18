@@ -40,10 +40,8 @@
     return (m_u.compare(m_u.length() - s.m_u.length(), s.m_u.length(), s.m_u) == 0);
 }
 
-void String::getBytes(byte buffer[], unsigned length) const noexcept {
-    for (int i = 0; i < m_u.length; i++) {
-        buffer[i] = (byte)m_u[i];
-    }
+void String::getBytes(byte buffer[], unsigned length) const noexcept{
+    std::transform(m_u.begin(), m_u.end(), std::back_inserter(buffer), [](unsigned char c) -> byte { return c; });
 }
 
 [[nodiscard]] int String::indexOf(const char* c) const noexcept { return m_u.find(c); }
@@ -77,13 +75,9 @@ void String::setCharAt(unsigned index, const char* c) { m_u[index] = c; }
 
 void String::toCharArray(const char* buffer[], unsigned length) noexcept {
     if (length <= m_u.length) {
-        for (int i = 0; i < length; i++) {
-            buffer[i] = m_u[i];
-        }
+        std::memcpy(buffer, m_u, length);
     } else {
-        for (i = 0; i < m_u.length; i++) {
-            buffer[i] = m_u[i];
-        }
+        std::memcpy(buffer, m_u, m_u.length());
     }
 }
 
