@@ -24,7 +24,13 @@
 struct BoardData;
 struct BoardInfo;
 
+/**
+* Initializes boardData and boardInfo
+**/
 extern "C" SMCE__DLL_RT_API bool init(BoardData*, const BoardInfo*);
+/**
+* Initializes boardData and boardInfo if not init has initialized it
+**/
 void maybe_init() noexcept;
 extern "C" SMCE__DLL_RT_API void deinit();
 

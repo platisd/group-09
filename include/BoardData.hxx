@@ -33,11 +33,17 @@
 #include <vector>
 #include "utility.hxx"
 
+/**
+* Protects shared data from being simultaneously accessed by multiple threads
+**/
 struct BidirMutexes {
     std::mutex rx_mutex;
     std::mutex tx_mutex;
 };
 
+/**
+* Contains the fixed size of the buffer from transmitter and reciever and its used size
+**/
 template <std::size_t N>
 struct FixBufferBus : BidirMutexes {
     std::array<std::byte, N> rx;
@@ -46,6 +52,9 @@ struct FixBufferBus : BidirMutexes {
     std::size_t tx_used_size;
 };
 
+/**
+* Contains the dynamic size of the buffer from transmitter and reciever
+**/
 struct DynaBufferBus : BidirMutexes {
     std::vector<std::byte> rx;
     std::vector<std::byte> tx;
@@ -62,7 +71,15 @@ struct BlockingBus : BufferBus {
     std::size_t request_bytes{}; // C++20: use `std::atomic_size_t` for thread-sync
 };
 
+/**
+* UartBus is used to read and write data to the console
+**/
 struct UartBus : DynaBufferBus {};
+
+/**
+* Each device store packet buffer and either a blocking bus that checks and responds to data requests or a generator function
+* to allow for non blocking data requets
+**/
 struct I2cBus {
     using Device = std::pair<PacketBuffers, std::variant<BlockingBus<std::tuple<>>, std::function<void(std::size_t)>>>;
     std::unordered_map<std::uint8_t, Device> slaves;
@@ -72,7 +89,9 @@ struct SpiBus {
     std::unordered_map<std::uint16_t, std::variant<BlockingBus<DynaBufferBus>, std::function<void(std::byte*, std::size_t)>>> slaves; // GCC10: use `std::span` in funcsig
     std::mutex slaves_mut;
 };
-
+/**
+* BoardData stores the data for the different settings 
+**/
 struct BoardData {
     std::vector<std::atomic_bool> digital_pin_values;
     std::vector<std::atomic_uint16_t> analog_pin_values;
